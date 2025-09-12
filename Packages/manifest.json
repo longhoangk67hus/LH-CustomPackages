@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git"
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git",
+    "com.lh.tools": "https://github.com/longhoangk67hus/LH-CustomPackages.git?path=Packages/com.lh.tools"
   }
 }
