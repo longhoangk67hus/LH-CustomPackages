@@ -12,7 +12,6 @@ namespace LH
         public static void CreateDefaultFolders()
         {
             Dir("_Game", "Scenes", "Scripts", "Prefabs", "ScriptableObjects", "Graphics", "Audio", "Animations",  "Resources");
-            Dir();
             Refresh();
         }
         public static void Dir(string root, params string[] dirs)
