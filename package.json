@@ -1,0 +1,12 @@
+{
+"name": "com.lh.tools",
+  "version": "1.0.0",
+  "displayName": "LH Tools",
+  "unity": "2020.3",
+  "description": "My Unity Custom Package For Creating Default Folders",
+  
+  "author": {
+    "name": "Long Hoang",
+    "url": "https://github.com/longhoangk67hus"
+  }
+}
