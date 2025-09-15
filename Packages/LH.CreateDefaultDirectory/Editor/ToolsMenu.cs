@@ -11,7 +11,7 @@ namespace LH
         [MenuItem("Tools/Setup/Create Default Folders")]
         public static void CreateDefaultFolders()
         {
-            Dir("_Game", "Scenes", "Scripts", "Prefabs", "ScriptableObjects", "Graphics", "Audio", "Animations",  "Resources");
+            Dir("_Game", "Scenes", "Scripts", "Prefabs", "ScriptableObjects", "Graphics", "Audio", "Animations",  "Resources", "Sprites");
             Refresh();
         }
         public static void Dir(string root, params string[] dirs)
