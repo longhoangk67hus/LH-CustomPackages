@@ -13,10 +13,11 @@ namespace LH
     public static class FromTemplate
     {
 #if UNITY_EDITOR
+        // Tên package đúng với repo của bạn
         private const string PACKAGE_NAME = "com.lh.tools";
         private const string SCRIPTABLEOBJECT_TEMPLATE_IN_PACKAGE = "NewScriptableObjectFile.cs.txt";
 
-        // Menu yêu cầu: Tools -> Utilities -> Create New Scriptable Object
+        // Menu: Tools -> Utilities -> Create New Scriptable Object
         [MenuItem("Tools/Utilities/Create New Scriptable Object", false, 100)]
         public static void Menu_CreateNewScriptableObject()
         {
@@ -24,8 +25,7 @@ namespace LH
         }
 
         /// <summary>
-        /// Tìm template trong package và gọi ProjectWindowUtil.CreateScriptAssetFromTemplateFile để Unity mở dialog tạo file.
-        /// Only package: không dò Assets hoặc global AssetDatabase find (an toàn cho package-only workflow).
+        /// Lấy template từ package và gọi ProjectWindowUtil để Unity mở dialog và thay #SCRIPTNAME#
         /// </summary>
         public static void CreateScriptFromPackageTemplate(string templateFileName, string defaultFileName)
         {
@@ -33,45 +33,35 @@ namespace LH
             if (string.IsNullOrEmpty(assetPath))
             {
                 EditorUtility.DisplayDialog("Template not found",
-                    $"Không tìm thấy template '{templateFileName}' trong package '{PACKAGE_NAME}'.\nVui lòng đặt file vào:\nPackages/{PACKAGE_NAME}/Editor/{templateFileName} (hoặc Editor/Template/...).",
+                    $"Không tìm thấy template '{templateFileName}' trong package '{PACKAGE_NAME}'.\nVui lòng đặt file vào:\nPackages/{PACKAGE_NAME}/Editor/Template/{templateFileName}",
                     "OK");
-                Debug.LogError($"[CreateFromTemplate] Template not found in package: {templateFileName}");
+                Debug.LogError($"[CreateFromTemplate] Template not found: {templateFileName}");
                 return;
             }
 
-            Debug.Log($"[CreateFromTemplate] Using package template asset path: {assetPath}");
-
-            // Unity sẽ tự thay #SCRIPTNAME# trong template và mở dialog đặt tên. File sẽ được tạo vào folder đang select trong Project window.
+            Debug.Log($"[CreateFromTemplate] Using template: {assetPath}");
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(assetPath, defaultFileName);
         }
 
         /// <summary>
-        /// Trả về đường dẫn asset dạng "Packages/.../Editor/<file>" (được ProjectWindowUtil chấp nhận),
-        /// hoặc null nếu không tồn tại trong package.
+        /// Trả về asset path dạng "Packages/.../Editor/Template/<file>" nếu tồn tại
         /// </summary>
         private static string FindTemplateAssetPathInPackage(string templateFileName)
         {
             try
             {
                 string projectRoot = Path.GetFullPath(Combine(dataPath, ".."));
-                string packageCandidate1 = Combine(projectRoot, "Packages", PACKAGE_NAME, "Editor", templateFileName);
-                if (File.Exists(packageCandidate1))
-                {
-                    return $"Packages/{PACKAGE_NAME}/Editor/{templateFileName}";
-                }
-
-                string packageCandidate2 = Combine(projectRoot, "Packages", PACKAGE_NAME, "Editor", "Template", templateFileName);
-                if (File.Exists(packageCandidate2))
+                string candidate = Combine(projectRoot, "Packages", PACKAGE_NAME, "Editor", "Template", templateFileName);
+                if (File.Exists(candidate))
                 {
                     return $"Packages/{PACKAGE_NAME}/Editor/Template/{templateFileName}";
                 }
 
-                // not found
                 return null;
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[FindTemplateAssetPathInPackage] Error while checking package: {ex}");
+                Debug.LogWarning($"[FindTemplateAssetPathInPackage] Error: {ex}");
                 return null;
             }
         }
