@@ -5,18 +5,6 @@ My Unity Custom Packages
 ```
 https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity
 ```
-```
-ObservableCollections.R3
-```
-```
-R3
-```
-```
-MemoryPack
-```
-```
-ZLinq
-```
 - [UniTask](https://github.com/Cysharp/UniTask)
 ```
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
