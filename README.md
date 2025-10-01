@@ -48,3 +48,6 @@ https://github.com/Cysharp/ZLinq.git?path=src/ZLinq.Unity/Assets/ZLinq.Unity
 1. Open the **Package Manager** window
 2. Select the **Add package from git URL** option from the `+` dropdown
 3. Enter this git url:
+```
+https://github.com/longhoangk67hus/LH-CustomPackages.git?path=Packages/LH.CreateDefaultDirectory
+```
