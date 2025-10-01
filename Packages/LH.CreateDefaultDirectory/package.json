@@ -1,12 +1,24 @@
 {
-"name": "com.lh.tools",
+  "name": "com.lh.custompackages",
+  "displayName": "LH Custom Packages",
   "version": "1.0.0",
-  "displayName": "LH Tools",
-  "unity": "2020.3",
-  "description": "My Unity Custom Package For Creating Default Folders",
-  
+  "unity": "2021.3",
+  "description": "LH - collection of custom editor/runtime utilities",
+  "keywords": [
+    "lh",
+    "tools",
+    "utilities"
+  ],
   "author": {
-    "name": "Long Hoang",
-    "url": "https://github.com/longhoangk67hus"
+    "name": "longhoangk67hus"
+  },
+  "dependencies": {
+    "com.glitchenzo.nuggetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/MemoryPack.Unity",
+    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
+    "com.annulusgames.litmotion": "https://github.com/annulusgames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
+    "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
+    "com.cysharp.zlinq": "https://github.com/Cysharp/ZLinq.git?path=src/ZLinq.Unity/Assets/ZLinq.Unity"
   }
 }
