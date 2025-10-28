@@ -1,0 +1,29 @@
+﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using UnityEngine;
+
+namespace Pooling
+{
+    public class GameUnit : MonoBehaviour
+    {
+        [Header("Pool Settings")] [field: SerializeField]
+        private PoolType poolType;
+
+        private Transform tf;
+
+        public PoolType PoolType => poolType;
+
+        public Transform TF
+        {
+            get
+            {
+                if (tf == null)
+                {
+                    tf = transform;
+                }
+
+                return tf;
+            }
+        }
+    }
+}

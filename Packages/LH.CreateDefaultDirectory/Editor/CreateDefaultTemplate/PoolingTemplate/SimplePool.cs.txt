@@ -1,0 +1,188 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace Pooling
+{
+    public static class SimplePool
+    {
+        private static readonly Dictionary<PoolType, Pool> poolInstance = new();
+
+        public static void Preload(GameUnit prefab, int amount, Transform parent)
+        {
+            if (prefab == null)
+            {
+                Debug.LogError("Prefab is empty");
+                return;
+            }
+
+            if (!poolInstance.ContainsKey(prefab.PoolType) || poolInstance[prefab.PoolType] == null)
+            {
+                Pool p = new Pool();
+                p.Preload(prefab, amount, parent);
+                poolInstance[prefab.PoolType] = p;
+            }
+        }
+
+        public static T Spawn<T>(PoolType poolType, Vector3 position, Quaternion rotation) where T : GameUnit
+        {
+            if (!poolInstance.ContainsKey(poolType))
+            {
+                Debug.LogError(poolType + "is not preload");
+                return null;
+
+            }
+
+            return poolInstance[poolType].Spawn(position, rotation) as T;
+        }
+
+        public static void Despawn(GameUnit unit)
+        {
+            if (!poolInstance.ContainsKey(unit.PoolType))
+            {
+                Debug.LogError(unit.PoolType + "is not preload");
+            }
+
+            poolInstance[unit.PoolType].Despawn(unit);
+        }
+
+        public static void Collect(PoolType poolType)
+        {
+            if (!poolInstance.ContainsKey(poolType))
+            {
+                Debug.LogError(poolType + "is not preload");
+            }
+
+            poolInstance[poolType].Collect();
+        }
+
+        public static void CollectAll()
+        {
+            foreach (var item in poolInstance.Values)
+            {
+                item.Collect();
+            }
+        }
+
+        public static void Release(PoolType poolType)
+        {
+            if (!poolInstance.ContainsKey(poolType))
+            {
+                Debug.LogError(poolType + "is not preload");
+            }
+
+            poolInstance[poolType].Release();
+        }
+
+        public static void ReleaseAll()
+        {
+            foreach (var item in poolInstance.Values)
+            {
+                item.Release();
+            }
+        }
+    }
+    public class Pool
+    {
+        [Header("Pool Settings")]
+        [Tooltip("The parent transform to hold the pooled units. Which placed in the inspector")]
+        Transform _parent;
+
+        [Tooltip("The prefab to be pooled.")] GameUnit _prefab;
+
+        [Tooltip("The queue to hold inactive units.")]
+        Queue<GameUnit> inactives = new Queue<GameUnit>();
+
+        [Tooltip("The list to hold active units.")]
+        List<GameUnit> actives = new List<GameUnit>();
+
+        /// <summary>
+        /// Instanstiate pool
+        /// </summary>
+        /// <param name="prefab">What we put in the pool</param>
+        /// <param name="amount">How many prefab we want to put</param>
+        /// <param name="parent">Where to place the prefab into a parent game object</param>
+        public void Preload(GameUnit prefab, int amount, Transform parent)
+        {
+            _parent = parent;
+            _prefab = prefab;
+
+            for (int i = 0; i < amount; i++)
+            {
+                Despawn(GameObject.Instantiate(prefab, parent));
+            }
+        }
+
+        /// <summary>
+        /// Get unit from pool
+        /// </summary>
+        /// <param name="position">Get the position to put prefab in scence</param>
+        /// <param name="rotation">Get the rotation to put prefab in scence</param>
+        /// <returns></returns>
+        public GameUnit Spawn(Vector3 position, Quaternion rotation)
+        {
+            GameUnit unit;
+            // Check if there is any inactive unit in the pool
+            if (inactives.Count <= 0)
+            {
+                // Instantiate a new unit if there is no inactive unit
+                unit = GameObject.Instantiate(_prefab, _parent);
+            }
+            else
+            {
+                // Get the first inactive unit from the queue
+                unit = inactives.Dequeue();
+            }
+
+            // Set the position and rotation of the unit
+            unit.TF.SetLocalPositionAndRotation(position, rotation);
+            // Add the unit to the active list and set it active
+            actives.Add(unit);
+            unit.gameObject.SetActive(true);
+            return unit;
+        }
+
+        /// <summary>
+        /// Return unit to pool
+        /// </summary>
+        /// <param name="unit">The game unit (game object) in order to destroy</param>
+        public void Despawn(GameUnit unit)
+        {
+            // Check if the unit is not null and is active in the scene
+            if (unit != null && unit.gameObject.activeSelf)
+            {
+                // Remove the unit from the active list and add it to the inactive queue
+                actives.Remove(unit);
+                // Put the unit back to the inactive queue and set it inactive
+                inactives.Enqueue(unit);
+                unit.gameObject.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// Collect all using unit back to pool
+        /// </summary>
+        public void Collect()
+        {
+            // Loop through all active units and return them to the pool
+            while (actives.Count > 0)
+            {
+                // Call Despawn on the first active unit
+                Despawn(actives[0]);
+            }
+        }
+
+        /// <summary>
+        /// Destroy all unit
+        /// </summary>
+        public void Release()
+        {
+            Collect();
+            while (inactives.Count > 0)
+            {
+                GameObject.Destroy(inactives.Dequeue().gameObject);
+            }
+
+            inactives.Clear();
+        }
+    }
+}

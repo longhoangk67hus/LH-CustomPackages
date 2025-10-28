@@ -1,0 +1,44 @@
+using UnityEngine;
+
+namespace Pooling
+{
+    public class PoolController : MonoBehaviour
+    {
+        [SerializeField] private PoolAmount[] pools;
+
+        private static PoolController instance;
+        private void Awake()
+        {
+            instance = this;
+
+            foreach (var pool in pools)
+            {
+                SimplePool.Preload(pool.prefab, pool.amount, pool.parent);
+            }
+        }
+
+        public T Spawn<T>(PoolType type, Vector3 position, Quaternion rotation) where T : GameUnit
+        {
+            return SimplePool.Spawn<T>(type, position, rotation);
+        }
+
+        public void Despawn(GameUnit unit)
+        {
+            SimplePool.Despawn(unit);
+        }
+    }
+    public enum PoolType
+    {
+        PeaProjectile = 0,
+        PlantSlotUI = 1,
+    }
+
+    [System.Serializable]
+    public class PoolAmount
+    {
+        public GameUnit prefab;
+        public Transform parent;
+        public int amount;
+    }
+
+}
