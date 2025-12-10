@@ -1,4 +1,3 @@
-// ToolsMenu_Folders.cs
 #if UNITY_EDITOR
 using System;
 using System.IO;
@@ -13,7 +12,7 @@ namespace LH
 {
     public static class ToolsMenu_CreateFolders
     {
-#if UNITY_EDITOR
+
         private const string PACKAGE_NAME = "com.lh.tools";
         private const string SINGLETON_TEMPLATE_IN_PACKAGE = "Singleton.cs.txt";
         private static readonly string[] POOLING_TEMPLATES_IN_PACKAGE = new[]
@@ -164,7 +163,6 @@ namespace LH
                 }
             }
         }
-
-#endif
+        
     }
 }
