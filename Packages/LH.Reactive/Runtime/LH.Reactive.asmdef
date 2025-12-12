@@ -1,3 +1,12 @@
 {
-	"name": "NewAssembly"
+  "name": "LH.Reactive",
+  "autoReferenced": true,
+  "allowUnsafeCode": false,
+  "noEngineReferences": false,
+  "references": [],
+  "optionalUnityReferences": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "defineConstraints": [],
+  "versionDefines": []
 }
